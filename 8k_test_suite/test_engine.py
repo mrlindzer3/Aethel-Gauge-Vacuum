@@ -13,8 +13,8 @@ class Test8KPipelineValidation(unittest.TestCase):
         """Validates that the required gigapixel rate calculation matches extreme limits."""
         pixels_per_frame = self.width * self.height
         pixel_rate_ghz = (pixels_per_frame * self.target_fps) / 1e9
-        # 8K @ 220Hz should precisely evaluate to 7.3008 Gpixels/sec
-        self.assertAlmostEqual(pixel_rate_ghz, 7.3008, places=3)
+        # 8K @ 220Hz evaluates to 7.299072 Gpixels/sec
+        self.assertAlmostEqual(pixel_rate_ghz, 7.299072, places=3)
 
     def test_frame_buffer_allocation_size(self):
         """Verifies that an 8K RGBA frame buffer matches the expected memory footprint (~126.56 MB)."""
@@ -31,7 +31,6 @@ class Test8KPipelineValidation(unittest.TestCase):
     def test_synthetic_render_loop(self):
         """Executes a short micro-benchmark loop to check execution safety."""
         start_time = time.time()
-        # Run a small matrix math workload mimicking a shader operation
         _ = np.dot(np.ones((16, 16)), np.ones((16, 16)))
         duration = time.time() - start_time
         self.assertLess(duration, 1.0, "Render iteration took too long.")
